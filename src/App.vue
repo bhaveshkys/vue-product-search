@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Header -->
+  
     <header class="bg-white shadow-md">
       <div class="container mx-auto px-4 py-6 flex justify-between items-center">
         <div class="text-2xl font-bold text-gray-800">ClothingCo</div>
@@ -15,11 +15,10 @@
       </div>
     </header>
 
-    <!-- Main Content -->
+    
     <main class="container mx-auto px-4 py-8">
       <h1 class="text-4xl font-bold text-center mb-8">Find Your Perfect Style</h1>
       
-      <!-- Search Bar -->
       <div class="max-w-2xl mx-auto mb-8">
         <input
           v-model="searchQuery"
@@ -30,13 +29,11 @@
         />
       </div>
 
-      <!-- Loading Indicator -->
       <div v-if="isLoading" class="text-center">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
         <p class="mt-2 text-gray-600">Loading...</p>
       </div>
 
-      <!-- Search Results -->
       <div v-else-if="searchQuery.length > 3" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <transition-group name="fade">
           <div
@@ -59,12 +56,10 @@
         </transition-group>
       </div>
 
-      <!-- No Results Message -->
       <div v-else-if="searchQuery.length > 3 && filteredProducts.length === 0" class="text-center text-gray-600">
         No results found for "{{ searchQuery }}". Try a different search term.
       </div>
 
-      <!-- Initial Message -->
       <div v-else class="text-center text-gray-600">
         <p> Start typing words like Jacket,Short,T shirt,Bagpack etc, to search for clothing items...</p> 
         <p> Data fetched from <a class="text-blue-500" :href="Link">fakestoreapi</a> </p> 
@@ -106,7 +101,6 @@ const filteredProducts = computed(() => {
 })
 
 const handleSearch = () => {
-  // The search is now handled by the computed property
 }
 </script>
 
