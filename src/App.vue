@@ -93,12 +93,54 @@ const fetchProducts = async () => {
 onMounted(fetchProducts)
 
 const filteredProducts = computed(() => {
-  if (searchQuery.value.length <= 3) return []
-  return products.value.filter(product =>
-    product.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
+  if (searchQuery.value.length <= 3) return [];
+
+  const threshold = 40; 
+  
+  return products.value.filter(product => {
+    const titleDistance = levenshteinDistance(
+      product.title.toLowerCase(),
+      searchQuery.value.toLowerCase()
+    );
+
+    const descriptionDistance = levenshteinDistance(
+      product.description.toLowerCase(),
+      searchQuery.value.toLowerCase()
+    );
+
+    console.log(`Title: ${product.title}, Distance: ${titleDistance}`);
+    console.log(`Description: ${product.description}, Distance: ${descriptionDistance}`);
+
+    return titleDistance <= threshold || descriptionDistance <= threshold;
+  });
+});
+
+function levenshteinDistance(str1, str2) {
+  const len1 = str1.length;
+  const len2 = str2.length;
+
+  const dp = Array(len1 + 1).fill(null).map(() => Array(len2 + 1).fill(null));
+
+  for (let i = 0; i <= len1; i++) {
+    dp[i][0] = i;
+  }
+  for (let j = 0; j <= len2; j++) {
+    dp[0][j] = j;
+  }
+
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,    // Delete 
+        dp[i][j - 1] + 1,    //    Insert
+        dp[i - 1][j - 1] + cost //     Substitution
+      );
+    }
+  }
+
+  return dp[len1][len2];
+}
 
 const handleSearch = () => {
 }
